@@ -1,3 +1,6 @@
+### Simple compile script ###
+build*/
+
 ### IntelliJ IDEA ###
 out/
 !**/src/main/**/out/
