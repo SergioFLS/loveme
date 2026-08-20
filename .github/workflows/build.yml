@@ -20,3 +20,8 @@ jobs:
         distribution: 'temurin'
     - name: Run build script
       run: ./build.sh
+    - uses: actions/upload-artifact@v7
+      with:
+        name: Package
+        path: build/loveme-unobfuscated.jar
+        archive: 'false'
