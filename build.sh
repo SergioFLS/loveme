@@ -1,8 +1,21 @@
 #!/usr/bin/bash
 set -e
 
-echo "Testing if javac in JAVA_HOME works..."
-"$JAVA_HOME/bin/javac" -version
+if [[ -z "$JAVA_HOME" ]]
+then
+	echo "The JAVA_HOME environment variable isn't set"
+	exit 1
+fi
+
+if [[ -z "$JAVAC" ]]
+then
+	echo "Using javac from JAVA_HOME"
+	JAVAC="$JAVA_HOME/bin/javac"
+fi
+
+
+echo "Testing if javac works..."
+$JAVAC -version
 echo "...success"
 
 mkdir -p build
@@ -16,7 +29,7 @@ public class Test {
 	}
 }
 EOF
-"$JAVA_HOME/bin/javac" -source 1.3 -target 1.3 Test.java
+$JAVAC -source 1.3 -target 1.3 Test.java
 echo "...success"
 
 if [[ ! -f main.tar.gz ]]
@@ -40,7 +53,7 @@ then
 fi
 
 echo "Compiling source"
-"$JAVA_HOME/bin/javac" `find ../src -name '*'.java` -d class -source 1.3 -target 1.3 -bootclasspath $BOOTCLASSPATH
+$JAVAC `find ../src -name '*'.java` -d class -source 1.3 -target 1.3 -bootclasspath $BOOTCLASSPATH
 echo "Packing to JAR"
 "$JAVA_HOME/bin/jar" cvfm loveme-unobfuscated.jar ../META-INF/MANIFEST.MF -C class . -C ../res .
 
